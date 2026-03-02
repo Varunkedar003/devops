@@ -16,11 +16,14 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                echo "Building ${APP_NAME} version ${BUILD_VERSION}"
-                sh 'echo Build successful'
-            }
-        }
+    steps {
+        echo "Building ${APP_NAME} version ${BUILD_VERSION}"
+        sh '''
+            mkdir -p build
+            echo "Application version ${BUILD_VERSION}" > build/app.txt
+        '''
+    }
+}
 
         stage('Test') {
             steps {
@@ -31,8 +34,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                echo "Packaging application..."
-                sh 'echo Package created'
+                archiveArtifacts artifacts: 'build/**', fingerprint: true
             }
         }
     }
