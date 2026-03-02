@@ -1,7 +1,12 @@
-FROM alpine:latest
+FROM nginx:alpine
 
-WORKDIR /app
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
 
-COPY app.txt .
+# Copy application file as homepage
+COPY app.txt /usr/share/nginx/html/index.html
 
-CMD ["cat", "app.txt"]
+# Expose port 80 (nginx default)
+EXPOSE 80
+
+# Nginx runs automatically via base image CMD
