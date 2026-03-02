@@ -1,12 +1,48 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = "devops-app"
+        BUILD_VERSION = "${env.BUILD_NUMBER}"
+    }
+
     stages {
+
+        stage('Checkout') {
+            steps {
+                echo "Checking out source code..."
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'CI Triggered Automatically!'
-                sh 'ls -la'
+                echo "Building ${APP_NAME} version ${BUILD_VERSION}"
+                sh 'echo Build successful'
             }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'echo Tests passed'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo "Packaging application..."
+                sh 'echo Package created'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully."
+        }
+        failure {
+            echo "Pipeline failed."
         }
     }
 }
